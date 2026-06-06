@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Gradebook - Ikonex Academy</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; background-color: #f4f6f9; color: #333; }
+        h1, h2, h3 { color: #2c3e50; }
+        .container { max-width: 900px; background: white; padding: 25px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        .form-inline { display: flex; gap: 10px; margin-bottom: 20px; align-items: center; }
+        input, select { padding: 10px; border: 1px solid #ccc; border-radius: 4px; }
+        button { background-color: #e67e22; color: white; border: none; padding: 10px 20px; cursor: pointer; border-radius: 4px; font-weight: bold; }
+        button:hover { background-color: #d35400; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th, td { border: 1px solid #ddd; padding: 12px; text-align: left; }
+        th { background-color: #f2f2f2; }
+        .btn-delete { color: #e74c3c; text-decoration: none; font-weight: bold; }
+        .nav-links { margin-bottom: 20px; }
+        .nav-links a { text-decoration: none; color: #3498db; font-weight: bold; }
+        .btn-pdf { background-color: #27ae60; color: white; padding: 10px 15px; text-decoration: none; font-weight: bold; border-radius: 4px; display: inline-block; margin-top: 8px; }
+        .btn-pdf:hover { background-color: #219a52; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="nav-links">
+        <a href="/students">&larr; Back to Student Directory</a>
+    </div>
+
+    <h1 th:text="'Gradebook: ' + ${student.firstName} + ' ' + ${student.lastName}">Gradebook: John Doe</h1>
+    <p th:text="'Admission Number: ' + ${student.admissionNumber}">Admission No: ADM001</p>
+    
+    <a th:href="@{/assessments/student/{studentId}/pdf(studentId=${student.id})}" class="btn-pdf">
+       Download PDF Report Card &darr;
+    </a>
+
+    <hr style="margin: 20px 0; border: 0; border-top: 1px solid #eee;">
+
+    <h2>Enter Term Assessment Marks</h2>
+    <form th:action="@{/assessments/add(studentId=${student.id})}" th:object="${newAssessment}" method="post" class="form-inline">
+        
+        <select th:field="*{subject.id}" required>
+            <option value="" disabled selected>Select Subject</option>
+            <option th:each="sub : ${subjects}" th:value="${sub.id}" th:text="${sub.name} + ' (' + ${sub.code} + ')'"></option>
+        </select>
+
+        <input type="number" step="0.1" th:field="*{marksObtained}" placeholder="Marks Awarded" min="0" required style="width: 130px;"/>
+        <input type="number" step="0.1" th:field="*{maxMarks}" placeholder="Out Of (Max)" min="1" required style="width: 130px;"/>
+
+        <button type="submit">Save Score</button>
+    </form>
+
+    <h2>Logged Academic Scores</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Subject Code</th>
+                <th>Subject Name</th>
+                <th>Marks Obtained</th>
+                <th>Maximum Marks</th>
+                <th>Percentage Performance</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="score : ${assessments}">
+                <td th:text="${score.subject.code}">MATH101</td>
+                <td th:text="${score.subject.name}">Mathematics</td>
+                <td th:text="${score.marksObtained}">85</td>
+                <td th:text="${score.maxMarks}">100</td>
+                <td th:text="${#numbers.formatDecimal(score.getPercentage(), 1, 2)} + '%'" style="font-weight: bold; color: #27ae60;">85.00%</td>
+                <td>
+                    <a th:href="@{/assessments/delete/{id}(id=${score.id}, studentId=${student.id})}" 
+                       class="btn-delete" 
+                       onclick="return confirm('Remove this score entry?')">Delete</a>
+                </td>
+            </tr>
+            <tr th:if="${#lists.isEmpty(assessments)}">
+                <td colspan="6" style="text-align: center; color: #7f8c8d;">No academic scores logged for this student yet.</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+</body>
+</html>

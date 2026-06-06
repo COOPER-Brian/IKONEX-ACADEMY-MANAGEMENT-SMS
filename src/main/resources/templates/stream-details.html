@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Stream Details - Ikonex Academy</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; background-color: #f4f6f9; color: #333; }
+        .container { max-width: 800px; background: white; padding: 25px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        h1 { color: #2c3e50; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th, td { border: 1px solid #ddd; padding: 12px; text-align: left; }
+        th { background-color: #f2f2f2; }
+        .btn-back { display: inline-block; margin-top: 20px; color: #3498db; text-decoration: none; font-weight: bold; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1 th:text="'Stream Details: ' + ${stream.name}">Stream Details: Form 1A</h1>
+    
+    <h3>Registered Students in this Stream</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Admission No</th>
+                <th>First Name</th>
+                <th>Last Name</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="student : ${stream.students}">
+                <td th:text="${student.id}">1</td>
+                <td th:text="${student.admissionNumber}">ADM001</td>
+                <td th:text="${student.firstName}">John</td>
+                <td th:text="${student.lastName}">Doe</td>
+            </tr>
+            <tr th:if="${#lists.isEmpty(stream.students)}">
+                <td colspan="4" style="text-align: center; color: #7f8c8d;">No students registered in this stream yet.</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a th:href="@{/streams}" class="btn-back">&larr; Back to Streams List</a>
+</div>
+
+</body>
+</html>

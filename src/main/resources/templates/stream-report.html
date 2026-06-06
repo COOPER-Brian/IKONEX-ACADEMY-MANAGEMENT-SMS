@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Class Performance Report - Ikonex Academy</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; background-color: #f4f6f9; color: #333; }
+        h1, h2 { color: #2c3e50; }
+        .container { max-width: 900px; background: white; padding: 25px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); margin: auto; }
+        .nav-links { margin-bottom: 20px; }
+        .nav-links a { text-decoration: none; color: #3498db; font-weight: bold; }
+        .btn-pdf { background-color: #27ae60; color: white; padding: 10px 15px; text-decoration: none; font-weight: bold; border-radius: 4px; display: inline-block; margin-bottom: 20px; }
+        .btn-pdf:hover { background-color: #219a52; }
+        .flex-container { display: flex; gap: 30px; margin-top: 20px; }
+        .section-box { flex: 1; background: #fafafa; padding: 15px; border-radius: 6px; border: 1px solid #eee; }
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; background: white; }
+        th, td { border: 1px solid #ddd; padding: 10px; text-align: left; }
+        th { background-color: #34495e; color: white; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="nav-links">
+        <a href="/streams">&larr; Back to Streams Directory</a>
+    </div>
+
+    <h1 th:text="'Class Performance Analytics: ' + ${report.streamName}">Performance Report</h1>
+    <p th:text="'Total Active Enrollment: ' + ${report.totalStudents} + ' Students'">Total Students: 0</p>
+
+    <a th:href="@{/streams/report/{id}/pdf(id=${streamId})}" class="btn-pdf">
+        Export Class Summary PDF &darr;
+    </a>
+
+    <div class="flex-container">
+        <div class="section-box">
+            <h2>Subject Means Breakdown</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Subject Title</th>
+                        <th>Mean Average Score</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="entry : ${report.subjectAverages}">
+                        <td th:text="${entry.key}">Mathematics</td>
+                        <td th:text="${#numbers.formatDecimal(entry.value, 1, 2)} + '%'" style="font-weight: bold; color: #2980b9;">0.00%</td>
+                    </tr>
+                    <tr th:if="${#maps.isEmpty(report.subjectAverages)}">
+                        <td colspan="2" style="text-align: center; color: gray;">No scores logged.</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="section-box">
+            <h2>Merit Leaderboard Standings</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Rank</th>
+                        <th>Student Name</th>
+                        <th>Mean Score</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="entry, iter : ${report.studentRankings}">
+                        <td th:text="${iter.count}" style="font-weight: bold; color: #7f8c8d;">1</td>
+                        <td th:text="${entry.key}">John Doe</td>
+                        <td th:text="${#numbers.formatDecimal(entry.value, 1, 2)} + '%'" style="font-weight: bold; color: #27ae60;">0.00%</td>
+                    </tr>
+                    <tr th:if="${#maps.isEmpty(report.studentRankings)}">
+                        <td colspan="3" style="text-align: center; color: gray;">No entries found.</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

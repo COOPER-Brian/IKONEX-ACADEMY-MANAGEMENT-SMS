@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Subject Management - Ikonex Academy</title>
+        <div class="nav-links">
+        <a href="/">&larr; Main Dashboard</a> | 
+        <a href="/streams">Streams</a> | 
+        <a href="/students">Students</a> | 
+        <a href="/subjects">Subjects</a>
+    </div>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; background-color: #f4f6f9; color: #333; }
+        h1, h2 { color: #2c3e50; }
+        .container { max-width: 900px; background: white; padding: 25px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        .form-inline { display: flex; gap: 10px; margin-bottom: 20px; }
+        input, select { padding: 10px; border: 1px solid #ccc; border-radius: 4px; flex: 1; }
+        button { background-color: #9b59b6; color: white; border: none; padding: 10px 20px; cursor: pointer; border-radius: 4px; font-weight: bold; }
+        button:hover { background-color: #8e44ad; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th, td { border: 1px solid #ddd; padding: 12px; text-align: left; }
+        th { background-color: #f2f2f2; }
+        .actions a { text-decoration: none; margin-right: 10px; font-weight: bold; }
+        .btn-edit { color: #f39c12; }
+        .btn-delete { color: #e74c3c; }
+        .nav-links { margin-bottom: 20px; }
+        .nav-links a { text-decoration: none; color: #3498db; font-weight: bold; margin-right: 15px; }
+        .assign-container { background: #f9f9f9; padding: 15px; border-radius: 6px; margin: 20px 0; border: 1px solid #eee; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="nav-links">
+        <a href="/streams">Manage Streams</a> | 
+        <a href="/students">Manage Students</a>
+    </div>
+
+    <h1>Ikonex Academy - Subject Management</h1>
+    <div th:if="${errorMessage}" style="color:red; font-weight:bold;" th:text="${errorMessage}"></div>
+
+    <h2>Create New Subject</h2>
+    <form th:action="@{/subjects/add}" th:object="${newSubject}" method="post" class="form-inline">
+        <input type="text" th:field="*{code}" placeholder="Subject Code (e.g. MATH101)" required />
+        <input type="text" th:field="*{name}" placeholder="Subject Name (e.g. Mathematics)" required />
+        <button type="submit">Create Subject</button>
+    </form>
+
+    <div class="assign-container">
+        <h2>Assign Subject to Class Stream</h2>
+        <form th:action="@{/subjects/assign}" method="post" class="form-inline">
+            <select name="subjectId" required>
+                <option value="" disabled selected>Select Subject</option>
+                <option th:each="subj : ${subjects}" th:value="${subj.id}" th:text="${subj.name} + ' (' + ${subj.code} + ')'"></option>
+            </select>
+            <select name="streamId" required>
+                <option value="" disabled selected>Select Class Stream</option>
+                <option th:each="str : ${streams}" th:value="${str.id}" th:text="${str.name}"></option>
+            </select>
+            <button type="submit" style="background-color: #34495e;">Assign Allocation</button>
+        </form>
+    </div>
+
+    <h2>All Subjects</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Code</th>
+                <th>Subject Name</th>
+                <th>Assigned Streams</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="subject : ${subjects}">
+                <td th:text="${subject.code}">MATH101</td>
+                <td th:text="${subject.name}">Mathematics</td>
+                <td>
+                    <span th:each="str, iterStat : ${subject.streams}" 
+                          th:text="${str.name} + ${!iterStat.last ? ', ' : ''}">
+                    </span>
+                    <span th:if="${#lists.isEmpty(subject.streams)}" style="color: gray; font-style: italic;">None</span>
+                </td>
+                <td class="actions">
+                    <a th:href="@{/subjects/edit/{id}(id=${subject.id})}" class="btn-edit">Edit</a>
+                    <a th:href="@{/subjects/delete/{id}(id=${subject.id})}" class="btn-delete" onclick="return confirm('Delete this subject?')">Delete</a>
+                </td>
+            </tr>
+            <tr th:if="${#lists.isEmpty(subjects)}">
+                <td colspan="4" style="text-align: center; color: #7f8c8d;">No subjects registered yet.</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+</body>
+</html>

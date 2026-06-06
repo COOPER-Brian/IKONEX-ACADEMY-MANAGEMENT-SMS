@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Stream Management - Ikonex Academy</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; background-color: #f4f6f9; color: #333; }
+        h1, h2 { color: #2c3e50; }
+        .container { max-width: 800px; background: white; padding: 25px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); margin: auto; }
+        .form-group { margin-bottom: 15px; }
+        input[type="text"] { width: 100%; padding: 10px; box-sizing: border-box; border: 1px solid #ccc; border-radius: 4px; }
+        button { background-color: #3498db; color: white; border: none; padding: 10px 15px; cursor: pointer; border-radius: 4px; font-size: 14px; }
+        button:hover { background-color: #2980b9; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th, td { border: 1px solid #ddd; padding: 12px; text-align: left; }
+        th { background-color: #f2f2f2; }
+        .error { color: #e74c3c; margin-bottom: 15px; font-weight: bold; }
+        .btn-view { color: #3498db; text-decoration: none; font-weight: bold; }
+        .btn-report { color: #9b59b6; text-decoration: none; font-weight: bold; margin-left: 15px; }
+        .btn-report:hover { color: #8e44ad; }
+        .nav-links { margin-bottom: 25px; border-bottom: 1px solid #eee; padding-bottom: 10px; }
+        .nav-links a { text-decoration: none; color: #3498db; font-weight: bold; margin-right: 10px; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="nav-links">
+        <a href="/">&larr; Main Dashboard</a> | 
+        <a href="/streams">Streams</a> | 
+        <a href="/students">Students</a> | 
+        <a href="/subjects">Subjects</a>
+    </div>
+
+    <h1>Ikonex Academy - Class Stream Management</h1>
+    
+    <div th:if="${errorMessage}" class="error" th:text="${errorMessage}"></div>
+
+    <h2>Create New Class Stream</h2>
+    <form th:action="@{/streams/add}" th:object="${newStream}" method="post">
+        <div class="form-group">
+            <label>Stream Name (e.g., Form 1A):</label>
+            <input type="text" th:field="*{name}" required placeholder="Enter stream name..." />
+        </div>
+        <button type="submit">Save Stream</button>
+    </form>
+
+    <hr style="margin: 30px 0; border: 0; border-top: 1px solid #eee;">
+
+    <h2>All Available Streams</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Stream Name</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="stream : ${streams}">
+                <td th:text="${stream.id}">1</td>
+                <td th:text="${stream.name}">Form 1A</td>
+                <td>
+                    <a th:href="@{/streams/{id}(id=${stream.id})}" class="btn-view">View Details</a>
+                    
+                    <a th:href="@{/streams/report/{id}(id=${stream.id})}" class="btn-report">View Report Card</a>
+                </td>
+            </tr>
+            <tr th:if="${#lists.isEmpty(streams)}">
+                <td colspan="3" style="text-align: center; color: #7f8c8d;">No streams created yet. Use the form above to add one.</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+</body>
+</html>

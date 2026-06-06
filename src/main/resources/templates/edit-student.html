@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit Student - Ikonex Academy</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; background-color: #f4f6f9; color: #333; }
+        .container { max-width: 500px; background: white; padding: 25px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); margin: auto; }
+        h1 { color: #2c3e50; font-size: 24px; }
+        .form-group { margin-bottom: 15px; display: flex; flex-direction: column; }
+        label { margin-bottom: 5px; font-weight: bold; }
+        input, select { padding: 10px; border: 1px solid #ccc; border-radius: 4px; }
+        .btn-container { margin-top: 20px; display: flex; gap: 10px; }
+        button { background-color: #f39c12; color: white; border: none; padding: 10px 15px; cursor: pointer; border-radius: 4px; font-weight: bold; flex: 1; }
+        button:hover { background-color: #d35400; }
+        .btn-cancel { background-color: #95a5a6; text-align: center; color: white; text-decoration: none; padding: 10px 15px; border-radius: 4px; font-weight: bold; flex: 1; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Edit Student Information</h1>
+    <form th:action="@{/students/update/{id}(id=${student.id})}" th:object="${student}" method="post">
+        
+        <div class="form-group">
+            <label>Admission Number:</label>
+            <input type="text" th:field="*{admissionNumber}" readonly style="background-color: #eee;" />
+        </div>
+
+        <div class="form-group">
+            <label>First Name:</label>
+            <input type="text" th:field="*{firstName}" required />
+        </div>
+
+        <div class="form-group">
+            <label>Last Name:</label>
+            <input type="text" th:field="*{lastName}" required />
+        </div>
+
+        <div class="form-group">
+            <label>Class Stream:</label>
+            <select th:field="*{stream}" required>
+                <option th:each="stream : ${streams}" th:value="${stream.id}" th:text="${stream.name}"></option>
+            </select>
+        </div>
+
+        <div class="btn-container">
+            <button type="submit">Update Information</button>
+            <a href="/students" class="btn-cancel">Cancel</a>
+        </div>
+    </form>
+</div>
+
+</body>
+</html>

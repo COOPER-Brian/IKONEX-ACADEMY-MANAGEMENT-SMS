@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit Subject - Ikonex Academy</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; background-color: #f4f6f9; color: #333; }
+        .container { max-width: 450px; background: white; padding: 25px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); margin: auto; }
+        h1 { color: #2c3e50; font-size: 24px; }
+        .form-group { margin-bottom: 15px; display: flex; flex-direction: column; }
+        label { margin-bottom: 5px; font-weight: bold; }
+        input { padding: 10px; border: 1px solid #ccc; border-radius: 4px; }
+        .btn-container { margin-top: 20px; display: flex; gap: 10px; }
+        button { background-color: #f39c12; color: white; border: none; padding: 10px 15px; cursor: pointer; border-radius: 4px; font-weight: bold; flex: 1; }
+        .btn-cancel { background-color: #95a5a6; text-align: center; color: white; text-decoration: none; padding: 10px 15px; border-radius: 4px; font-weight: bold; flex: 1; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Edit Subject Details</h1>
+    <form th:action="@{/subjects/update/{id}(id=${subject.id})}" th:object="${subject}" method="post">
+        
+        <div class="form-group">
+            <label>Subject Code:</label>
+            <input type="text" th:field="*{code}" required />
+        </div>
+
+        <div class="form-group">
+            <label>Subject Name:</label>
+            <input type="text" th:field="*{name}" required />
+        </div>
+
+        <div class="btn-container">
+            <button type="submit">Update Subject</button>
+            <a href="/subjects" class="btn-cancel">Cancel</a>
+        </div>
+    </form>
+</div>
+
+</body>
+</html>

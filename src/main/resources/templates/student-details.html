@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Student Profile - Ikonex Academy</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; background-color: #f4f6f9; color: #333; }
+        .container { max-width: 600px; background: white; padding: 25px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); margin: auto; }
+        h1 { color: #2c3e50; border-bottom: 2px solid #eee; padding-bottom: 10px; }
+        .profile-row { margin: 15px 0; font-size: 18px; }
+        .label { font-weight: bold; color: #7f8c8d; display: inline-block; width: 150px; }
+        .btn-back { display: inline-block; margin-top: 25px; color: #3498db; text-decoration: none; font-weight: bold; }
+        .btn-gradebook { background-color: #e67e22; color: white; padding: 10px 15px; text-decoration: none; font-weight: bold; border-radius: 4px; display: inline-block; margin-top: 10px; }
+        .btn-gradebook:hover { background-color: #d35400; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Student Profile</h1>
+    
+    <div class="profile-row">
+        <span class="label">Admission No:</span>
+        <span th:text="${student.admissionNumber}">ADM001</span>
+    </div>
+    <div class="profile-row">
+        <span class="label">First Name:</span>
+        <span th:text="${student.firstName}">John</span>
+    </div>
+    <div class="profile-row">
+        <span class="label">Last Name:</span>
+        <span th:text="${student.lastName}">Doe</span>
+    </div>
+    <div class="profile-row">
+        <span class="label">Assigned Stream:</span>
+        <span th:text="${student.stream != null ? student.stream.name : 'Unassigned'}">Form 1A</span>
+    </div>
+
+    <hr style="margin: 20px 0; border: 0; border-top: 1px solid #eee;">
+    
+    <h3>Academic Progress Tracking</h3>
+    <p style="color: #555;">Manage, view, and input exam scores for this student profile.</p>
+    <a th:href="@{/assessments/student/{id}(id=${student.id})}" class="btn-gradebook">
+       Open Student Gradebook &rarr;
+    </a>
+
+    <br/>
+    <a href="/students" class="btn-back">&larr; Back to Students List</a>
+</div>
+
+</body>
+</html>

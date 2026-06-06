@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Dashboard - Ikonex Academy</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 0; padding: 40px; background-color: #f4f6f9; color: #333; }
+        .header { text-align: center; margin-bottom: 40px; }
+        .header h1 { color: #2c3e50; margin: 0; font-size: 32px; }
+        .header p { color: #7f8c8d; font-size: 16px; margin-top: 5px; }
+        .grid { display: flex; gap: 20px; max-width: 1000px; margin: 0 auto; justify-content: center; }
+        .card { background: white; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); padding: 30px; width: 250px; text-align: center; text-decoration: none; transition: transform 0.2s, box-shadow 0.2s; }
+        .card:hover { transform: translateY(-5px); box-shadow: 0 6px 12px rgba(0,0,0,0.15); }
+        .card h2 { margin: 10px 0; font-size: 22px; }
+        .card .count { font-size: 36px; font-weight: bold; margin: 15px 0; }
+        .streams-card { border-top: 5px solid #3498db; }
+        .streams-card h2, .streams-card .count { color: #3498db; }
+        .students-card { border-top: 5px solid #2ecc71; }
+        .students-card h2, .students-card .count { color: #2ecc71; }
+        .subjects-card { border-top: 5px solid #9b59b6; }
+        .subjects-card h2, .subjects-card .count { color: #9b59b6; }
+        .hint { text-align: center; color: #95a5a6; margin-top: 40px; font-style: italic; }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <h1>Ikonex Academy Portal</h1>
+        <p>School Management System Dashboard</p>
+    </div>
+
+    <div class="grid">
+        <a href="/streams" class="card streams-card">
+            <h2>Class Streams</h2>
+            <div class="count" th:text="${totalStreams}">0</div>
+            <p style="color: #666;">Manage classrooms, channels, and layouts.</p>
+        </a>
+
+        <a href="/students" class="card students-card">
+            <h2>Student Profiles</h2>
+            <div class="count" th:text="${totalStudents}">0</div>
+            <p style="color: #666;">Register info, view folders, and open gradebooks.</p>
+        </a>
+
+        <a href="/subjects" class="card subjects-card">
+            <h2>Subject Directory</h2>
+            <div class="count" th:text="${totalSubjects}">0</div>
+            <p style="color: #666;">Create core units and link them to class allocations.</p>
+        </a>
+    </div>
+
+    <div class="hint">
+        Tip: Click any panel above to access its administrative controls instantly.
+    </div>
+
+</body>
+</html>
