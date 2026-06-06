@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 @Controller
 @RequestMapping("/students")
 public class StudentController {
-
+   
     @Autowired
     private StudentService studentService;
 
@@ -24,8 +24,7 @@ public class StudentController {
         model.addAttribute("students", studentService.getAllStudents());
         model.addAttribute("streams", streamService.getAllStreams());
         model.addAttribute("newStudent", new Student());
-        return "students"; // Looks for students.html
-    }
+        return "students"; 
 
     // Process Student Registration
     @PostMapping("/add")
@@ -49,7 +48,7 @@ public class StudentController {
         }
         model.addAttribute("student", student);
         model.addAttribute("streams", streamService.getAllStreams());
-        return "edit-student"; // Looks for edit-student.html
+        return "edit-student"; 
     }
 
     // Process Student Update
@@ -75,6 +74,6 @@ public class StudentController {
             return "redirect:/students";
         }
         model.addAttribute("student", student);
-        return "student-details"; // Looks for student-details.html
+        return "student-details";
     }
 }
