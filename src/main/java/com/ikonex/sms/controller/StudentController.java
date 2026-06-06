@@ -25,6 +25,7 @@ public class StudentController {
         model.addAttribute("streams", streamService.getAllStreams());
         model.addAttribute("newStudent", new Student());
         return "students"; 
+    }
 
     // Process Student Registration
     @PostMapping("/add")
