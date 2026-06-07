@@ -3,12 +3,6 @@
 <head>
     <meta charset="UTF-8">
     <title>Subject Management - Ikonex Academy</title>
-        <div class="nav-links">
-        <a href="/">&larr; Main Dashboard</a> | 
-        <a href="/streams">Streams</a> | 
-        <a href="/students">Students</a> | 
-        <a href="/subjects">Subjects</a>
-    </div>
     <style>
         body { font-family: Arial, sans-serif; margin: 40px; background-color: #f4f6f9; color: #333; }
         h1, h2 { color: #2c3e50; }
@@ -32,8 +26,10 @@
 
 <div class="container">
     <div class="nav-links">
+        <a href="/">&larr; Main Dashboard</a> | 
         <a href="/streams">Manage Streams</a> | 
-        <a href="/students">Manage Students</a>
+        <a href="/students">Manage Students</a> |
+        <a href="/subjects">Manage Subjects</a>
     </div>
 
     <h1>Ikonex Academy - Subject Management</h1>
@@ -73,17 +69,17 @@
         </thead>
         <tbody>
             <tr th:each="subject : ${subjects}">
-                <td th:text="${subject.code}">MATH101</td>
-                <td th:text="${subject.name}">Mathematics</td>
+                <td th:text="${subject?.code}">MATH101</td>
+                <td th:text="${subject?.name}">Mathematics</td>
                 <td>
-                    <span th:each="str, iterStat : ${subject.streams}" 
-                          th:text="${str.name} + ${!iterStat.last ? ', ' : ''}">
+                    <span th:if="${subject?.streams != null}" th:each="str, iterStat : ${subject.streams}">
+                        <span th:text="${str?.name} + ${!iterStat.last ? ', ' : ''}"></span>
                     </span>
-                    <span th:if="${#lists.isEmpty(subject.streams)}" style="color: gray; font-style: italic;">None</span>
+                    <span th:if="${subject == null || subject.streams == null || #lists.isEmpty(subject.streams)}" style="color: gray; font-style: italic;">None</span>
                 </td>
                 <td class="actions">
-                    <a th:href="@{/subjects/edit/{id}(id=${subject.id})}" class="btn-edit">Edit</a>
-                    <a th:href="@{/subjects/delete/{id}(id=${subject.id})}" class="btn-delete" onclick="return confirm('Delete this subject?')">Delete</a>
+                    <a th:if="${subject != null}" th:href="@{/subjects/edit/{id}(id=${subject.id})}" class="btn-edit">Edit</a>
+                    <a th:if="${subject != null}" th:href="@{/subjects/delete/{id}(id=${subject.id})}" class="btn-delete" onclick="return confirm('Delete this subject?')">Delete</a>
                 </td>
             </tr>
             <tr th:if="${#lists.isEmpty(subjects)}">
