@@ -8,6 +8,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collections;
+import java.util.List;
+
 @Controller
 @RequestMapping("/subjects")
 public class SubjectController {
@@ -21,52 +24,82 @@ public class SubjectController {
     // View all subjects & add form
     @GetMapping
     public String viewSubjectsPage(Model model) {
-        model.addAttribute("subjects", subjectService.getAllSubjects());
-        model.addAttribute("streams", streamService.getAllStreams());
+
+        List<Subject> subjects = subjectService.getAllSubjects();
+        if (subjects == null) subjects = Collections.emptyList();
+
+        model.addAttribute("subjects", subjects);
+
+        model.addAttribute("streams",
+                streamService.getAllStreams() != null
+                        ? streamService.getAllStreams()
+                        : Collections.emptyList()
+        );
+
         model.addAttribute("newSubject", new Subject());
-        return "subjects"; // Looks for subjects.html
+
+        return "subjects";
     }
 
-    // Process Add Subject
+    // Add subject
     @PostMapping("/add")
     public String addSubject(@ModelAttribute("newSubject") Subject subject, Model model) {
+
         String result = subjectService.saveSubject(subject);
-        if (result.startsWith("Error")) {
+
+        if (result != null && result.startsWith("Error")) {
             model.addAttribute("errorMessage", result);
-            model.addAttribute("subjects", subjectService.getAllSubjects());
-            model.addAttribute("streams", streamService.getAllStreams());
+
+            model.addAttribute("subjects",
+                    subjectService.getAllSubjects() != null
+                            ? subjectService.getAllSubjects()
+                            : Collections.emptyList()
+            );
+
+            model.addAttribute("streams",
+                    streamService.getAllStreams() != null
+                            ? streamService.getAllStreams()
+                            : Collections.emptyList()
+            );
+
             return "subjects";
         }
+
         return "redirect:/subjects";
     }
 
-    // Process Assign Subject to Stream Form Connection
+    // Assign subject to stream
     @PostMapping("/assign")
-    public String assignToStream(@RequestParam("subjectId") Long subjectId, @RequestParam("streamId") Long streamId) {
+    public String assignToStream(@RequestParam("subjectId") Long subjectId,
+                                  @RequestParam("streamId") Long streamId) {
         subjectService.assignSubjectToStream(subjectId, streamId);
         return "redirect:/subjects";
     }
 
-    // Show Edit Form
+    // Edit form
     @GetMapping("/edit/{id}")
     public String showEditForm(@PathVariable("id") Long id, Model model) {
+
         Subject subject = subjectService.getSubjectById(id);
+
         if (subject == null) {
             return "redirect:/subjects";
         }
+
         model.addAttribute("subject", subject);
-        return "edit-subject"; // Looks for edit-subject.html
+        return "edit-subject";
     }
 
-    // Process Update Subject
+    // Update subject
     @PostMapping("/update/{id}")
-    public String updateSubject(@PathVariable("id") Long id, @ModelAttribute("subject") Subject subject) {
+    public String updateSubject(@PathVariable("id") Long id,
+                                @ModelAttribute("subject") Subject subject) {
         subject.setId(id);
         subjectService.saveSubject(subject);
         return "redirect:/subjects";
     }
 
-    // Delete Subject
+    // Delete subject
     @GetMapping("/delete/{id}")
     public String deleteSubject(@PathVariable("id") Long id) {
         subjectService.deleteSubject(id);
