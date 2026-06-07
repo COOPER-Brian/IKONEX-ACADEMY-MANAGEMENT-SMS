@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Subject Management - Ikonex Academy</title>
+
     <style>
         body { font-family: Arial, sans-serif; margin: 40px; background-color: #f4f6f9; color: #333; }
         h1, h2 { color: #2c3e50; }
@@ -22,17 +23,20 @@
         .assign-container { background: #f9f9f9; padding: 15px; border-radius: 6px; margin: 20px 0; border: 1px solid #eee; }
     </style>
 </head>
+
 <body>
 
 <div class="container">
+
     <div class="nav-links">
-        <a href="/">&larr; Main Dashboard</a> | 
-        <a href="/streams">Manage Streams</a> | 
+        <a href="/">&larr; Main Dashboard</a> |
+        <a href="/streams">Manage Streams</a> |
         <a href="/students">Manage Students</a> |
         <a href="/subjects">Manage Subjects</a>
     </div>
 
     <h1>Ikonex Academy - Subject Management</h1>
+
     <div th:if="${errorMessage}" style="color:red; font-weight:bold;" th:text="${errorMessage}"></div>
 
     <h2>Create New Subject</h2>
@@ -44,49 +48,82 @@
 
     <div class="assign-container">
         <h2>Assign Subject to Class Stream</h2>
+
         <form th:action="@{/subjects/assign}" method="post" class="form-inline">
+
             <select name="subjectId" required>
                 <option value="" disabled selected>Select Subject</option>
-                <option th:each="subj : ${subjects}" th:value="${subj.id}" th:text="${subj.name} + ' (' + ${subj.code} + ')'"></option>
+
+                <option th:each="subj : ${subjects}"
+                        th:value="${subj.id}"
+                        th:text="${subj.name + ' (' + subj.code + ')'}">
+                </option>
+
             </select>
+
             <select name="streamId" required>
                 <option value="" disabled selected>Select Class Stream</option>
-                <option th:each="str : ${streams}" th:value="${str.id}" th:text="${str.name}"></option>
+
+                <option th:each="str : ${streams}"
+                        th:value="${str.id}"
+                        th:text="${str.name}">
+                </option>
+
             </select>
+
             <button type="submit" style="background-color: #34495e;">Assign Allocation</button>
         </form>
     </div>
 
     <h2>All Subjects</h2>
+
     <table>
         <thead>
-            <tr>
-                <th>Code</th>
-                <th>Subject Name</th>
-                <th>Assigned Streams</th>
-                <th>Actions</th>
-            </tr>
+        <tr>
+            <th>Code</th>
+            <th>Subject Name</th>
+            <th>Assigned Streams</th>
+            <th>Actions</th>
+        </tr>
         </thead>
+
         <tbody>
-            <tr th:each="subject : ${subjects}">
-                <td th:text="${subject?.code}">MATH101</td>
-                <td th:text="${subject?.name}">Mathematics</td>
-                <td>
-                    <span th:if="${subject?.streams != null}" th:each="str, iterStat : ${subject.streams}">
-                        <span th:text="${str?.name} + ${!iterStat.last ? ', ' : ''}"></span>
-                    </span>
-                    <span th:if="${subject == null || subject.streams == null || #lists.isEmpty(subject.streams)}" style="color: gray; font-style: italic;">None</span>
-                </td>
-                <td class="actions">
-                    <a th:if="${subject != null}" th:href="@{/subjects/edit/{id}(id=${subject.id})}" class="btn-edit">Edit</a>
-                    <a th:if="${subject != null}" th:href="@{/subjects/delete/{id}(id=${subject.id})}" class="btn-delete" onclick="return confirm('Delete this subject?')">Delete</a>
-                </td>
-            </tr>
-            <tr th:if="${#lists.isEmpty(subjects)}">
-                <td colspan="4" style="text-align: center; color: #7f8c8d;">No subjects registered yet.</td>
-            </tr>
+
+        <tr th:each="subject : ${subjects}">
+
+            <td th:text="${subject.code}">MATH101</td>
+            <td th:text="${subject.name}">Mathematics</td>
+
+            <td>
+                <span th:if="${subject.streams != null and !#lists.isEmpty(subject.streams)}"
+                      th:each="str, iterStat : ${subject.streams}">
+                    <span th:text="${str.name + (iterStat.last ? '' : ', ')}"></span>
+                </span>
+
+                <span th:if="${subject.streams == null or #lists.isEmpty(subject.streams)}"
+                      style="color: gray; font-style: italic;">
+                    None
+                </span>
+            </td>
+
+            <td class="actions">
+                <a th:href="@{/subjects/edit/{id}(id=${subject.id})}" class="btn-edit">Edit</a>
+                <a th:href="@{/subjects/delete/{id}(id=${subject.id})}"
+                   class="btn-delete"
+                   onclick="return confirm('Delete this subject?')">Delete</a>
+            </td>
+
+        </tr>
+
+        <tr th:if="${#lists.isEmpty(subjects)}">
+            <td colspan="4" style="text-align: center; color: #7f8c8d;">
+                No subjects registered yet.
+            </td>
+        </tr>
+
         </tbody>
     </table>
+
 </div>
 
 </body>
