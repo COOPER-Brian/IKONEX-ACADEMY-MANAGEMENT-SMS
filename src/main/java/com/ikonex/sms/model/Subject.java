@@ -30,10 +30,10 @@ public class Subject {
     @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinTable(
             name = "stream_subjects",
-            joinColumns = @JoinColumn(name = "subject_id"),
-            inverseJoinColumns = @JoinColumn(name = "stream_id")
+            joinColumns = @JoinColumn(name = "stream_id"),        // 🌟 Matches your SQL column order
+            inverseJoinColumns = @JoinColumn(name = "subject_id")  // 🌟 Matches your SQL column order
     )
     @ToString.Exclude
     @EqualsAndHashCode.Exclude 
-    private Set<StreamEntity> streams = new HashSet<>(); 
+    private Set<StreamEntity> streams = new HashSet<>();
 }
