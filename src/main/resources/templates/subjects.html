@@ -95,12 +95,13 @@
             <td th:text="${subject.name}">Mathematics</td>
 
             <td>
-                <span th:if="${subject.streams != null and !#lists.isEmpty(subject.streams)}"
+              
+                <span th:if="${subject.streams != null and !#sets.isEmpty(subject.streams)}"
                       th:each="str, iterStat : ${subject.streams}">
                     <span th:text="${str.name + (iterStat.last ? '' : ', ')}"></span>
                 </span>
 
-                <span th:if="${subject.streams == null or #lists.isEmpty(subject.streams)}"
+                <span th:if="${subject.streams == null or #sets.isEmpty(subject.streams)}"
                       style="color: gray; font-style: italic;">
                     None
                 </span>
@@ -115,6 +116,7 @@
 
         </tr>
 
+    
         <tr th:if="${#lists.isEmpty(subjects)}">
             <td colspan="4" style="text-align: center; color: #7f8c8d;">
                 No subjects registered yet.

@@ -4,8 +4,12 @@ import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
-import java.util.List;
+import lombok.EqualsAndHashCode;
 import lombok.ToString;
+
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "streams")
@@ -21,8 +25,14 @@ public class StreamEntity {
     @Column(nullable = false, unique = true)
     private String name;
 
-    // One stream can have many students. We will link this up fully when we create the Student model.
+    // One stream can have many students.
     @OneToMany(mappedBy = "stream", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @ToString.Exclude // To prevent circular reference in toString()
+    @ToString.Exclude 
     private List<Student> students;
+
+    //  Connects back to the 'streams' field inside Subject entity
+    @ManyToMany(mappedBy = "streams")
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
+    private Set<Subject> subjects = new HashSet<>();
 }
